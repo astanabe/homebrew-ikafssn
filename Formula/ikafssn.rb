@@ -7,7 +7,7 @@ class Ikafssn < Formula
 
   bottle do
     root_url "https://github.com/astanabe/ikafssn/releases/download/vVERSION"
-    sha256 cellar: :any, arm64_sonoma: "BOTTLE_SHA256"
+    sha256 cellar: :any, arm64_tahoe: "BOTTLE_SHA256"
   end
 
   depends_on "cmake" => :build
