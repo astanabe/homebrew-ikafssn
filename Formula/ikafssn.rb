@@ -3,7 +3,7 @@ class Ikafssn < Formula
   homepage "https://github.com/astanabe/ikafssn"
   url "https://github.com/astanabe/ikafssn/archive/refs/tags/v0.1.2026.02.28.tar.gz"
   sha256 "4eb632492f6430329a4e23875d73c9024f8f9c877d43871e686b7ee58da2b9b8"
-  license "GPL-2.0-only"
+  license "Apache-2.0"
 
   bottle do
     root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.02.28"
