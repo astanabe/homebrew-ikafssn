@@ -63,8 +63,9 @@ class Ikafssn < Formula
       system "make", "install"
     end
 
-    # Build NCBI C++ Toolkit (static)
+    # Build NCBI C++ Toolkit (static, patched for madvise MADV_RANDOM on SeqDB mmaps)
     resource("ncbi-cxx-toolkit").stage do
+      system "patch", "-p1", "-i", "#{buildpath}/patches/ncbi-cxx-toolkit-seqdb-madvise-random.patch"
       ENV.prepend "CFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       ENV.prepend "CXXFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       system "./cmake-configure",
