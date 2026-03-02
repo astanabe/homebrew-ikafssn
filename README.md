@@ -21,7 +21,7 @@ After creating a new release on GitHub (tag format: `vX.Y.YYYY.MM.DD`):
    VERSION="0.1.YYYY.MM.DD"
    TAG="v${VERSION}"
    curl -sL "https://github.com/astanabe/ikafssn/archive/refs/tags/${TAG}.tar.gz" | sha256sum
-   curl -sL "https://github.com/astanabe/ikafssn/releases/download/${TAG}/ikafssn--${VERSION}.arm64_tahoe.bottle.tar.gz" | sha256sum
+   curl -sL "https://github.com/astanabe/ikafssn/releases/download/${TAG}/ikafssn-${VERSION}.arm64_tahoe.bottle.tar.gz" | sha256sum
    ```
 
    The Bottle SHA256 is also printed in the CI log as a `::notice::` annotation.
