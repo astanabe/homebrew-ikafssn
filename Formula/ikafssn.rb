@@ -1,13 +1,13 @@
 class Ikafssn < Formula
   desc "K-mer-based alignment-free similarity search for nucleotide sequences"
   homepage "https://github.com/astanabe/ikafssn"
-  url "https://github.com/astanabe/ikafssn/archive/refs/tags/v0.1.2026.03.16.tar.gz"
-  sha256 "49a8cd5f226214ba44dd67a767d62ff4107009f6242ec49b9e7464422526ce4b"
+  url "https://github.com/astanabe/ikafssn/archive/refs/tags/v0.1.2026.03.18.tar.gz"
+  sha256 "e711068b06fcb2a56257443fe845484c653338320b5906f4e966e2666c9aeb30"
   license "Apache-2.0"
 
   bottle do
-    root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.03.16"
-    sha256 cellar: :any, arm64_tahoe: "df15ca5ecf0cb0f338ce31d4508bdcca6639c444c6fdc8ea88fdedb4e25137ed"
+    root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.03.18"
+    sha256 cellar: :any, arm64_tahoe: "963589d3bd2988a018527bb3839bcf04201f9e333f341b8baaaf2e5e56b79f68"
   end
 
   depends_on "cmake" => :build
@@ -40,8 +40,9 @@ class Ikafssn < Formula
   end
 
   def install
-    # Build Parasail (static)
+    # Build Parasail (static, patched for DEGMATCH matrix and score-based CIGAR match)
     resource("parasail").stage do
+      system "patch", "-p1", "-i", "#{buildpath}/patches/parasail-degmatch-cigar-score.patch"
       system "cmake", "-S", ".", "-B", "build",
              "-DCMAKE_BUILD_TYPE=Release",
              "-DCMAKE_INSTALL_PREFIX=#{buildpath}/parasail",
