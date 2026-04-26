@@ -7,7 +7,7 @@ class Ikafssn < Formula
 
   bottle do
     root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.04.08"
-    sha256 cellar: :any, arm64_tahoe: "4c1018a5a52daffcd8d6a3479ed8b21a96b4bc39808412ef3ea22dc37b85eca6"
+    sha256 cellar: :any, arm64_tahoe: "08f3e0aad598319242e2165ad3f69c270a5c21c7d8535076d79cfbb810cd232e"
   end
 
   depends_on "cmake" => :build
@@ -15,7 +15,6 @@ class Ikafssn < Formula
   depends_on "automake" => :build
   depends_on "libtool" => :build
   depends_on "curl"
-  depends_on "drogon"
   depends_on "jsoncpp"
   depends_on "libdeflate"
   depends_on "lmdb"
@@ -25,8 +24,8 @@ class Ikafssn < Formula
   depends_on "xz"
 
   resource "ncbi-cxx-toolkit" do
-    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.0.0.tar.gz"
-    sha256 "cde821b44c4f9711b464c56b66b61c5ff419e13b759cc88896154114da6d41a3"
+    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.2.0.tar.gz"
+    sha256 "17294b30dfbdef7bc4fc3785e2b6e43e7166c61a22df22874ff28e2876de50ec"
   end
 
   resource "parasail" do
@@ -35,8 +34,20 @@ class Ikafssn < Formula
   end
 
   resource "htslib" do
-    url "https://github.com/samtools/htslib/releases/download/1.23/htslib-1.23.tar.bz2"
-    sha256 "63927199ef9cea03096345b95d96cb600ae10385248b2ef670b0496c2ab7e4cd"
+    url "https://github.com/samtools/htslib/releases/download/1.23.1/htslib-1.23.1.tar.bz2"
+    sha256 "f8a3f36effeec38f043c53ab1f2d9ed45064f14205c5ef8e3c815763b90803c4"
+  end
+
+  resource "drogon" do
+    url "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.12.tar.gz"
+    sha256 "becc3c4f3b90f069f814baef164a7e3a2b31476dc6fe249b02ff07a13d032f48"
+  end
+
+  # The Drogon release tarball does not include the trantor submodule contents;
+  # this is the matching trantor release tag (commit 5000e2a).
+  resource "trantor" do
+    url "https://github.com/an-tao/trantor/archive/refs/tags/v1.5.26.tar.gz"
+    sha256 "e47092938aaf53d51c8bc72d8f54ebdcf537e6e4ac9c8276f3539413d6dfeddf"
   end
 
   def install
@@ -82,10 +93,34 @@ class Ikafssn < Formula
     # Detect NCBI build tag
     ncbi_build_tag = Dir["#{buildpath}/ncbi-cxx-toolkit/CMake-*/"].map { |d| File.basename(d) }.first
 
+    # Build Drogon (static; trantor submodule replaced by the matching release tarball)
+    resource("drogon").stage do
+      drogon_src = Pathname.pwd
+      rm_r drogon_src/"trantor"
+      (drogon_src/"trantor").mkpath
+      resource("trantor").stage(drogon_src/"trantor")
+
+      system "cmake", "-S", ".", "-B", "build",
+             "-DCMAKE_BUILD_TYPE=Release",
+             "-DCMAKE_INSTALL_PREFIX=#{buildpath}/drogon",
+             "-DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}",
+             "-DBUILD_SHARED_LIBS=OFF",
+             "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+             "-DBUILD_CTL=OFF",
+             "-DBUILD_EXAMPLES=OFF",
+             "-DBUILD_ORM=OFF",
+             "-DBUILD_BROTLI=OFF",
+             "-DBUILD_YAML_CONFIG=OFF",
+             "-DBUILD_DOC=OFF"
+      system "cmake", "--build", "build", "-j#{ENV.make_jobs}"
+      system "cmake", "--install", "build"
+    end
+
     # Build ikafssn
     system "cmake", "-S", ".", "-B", "build",
            "-DCMAKE_BUILD_TYPE=Release",
            "-DNCBI_TOOLKIT_BUILD_TAG=#{ncbi_build_tag}",
+           "-DDROGON_DIR=#{buildpath}/drogon",
            "-DBUILD_HTTPD=ON",
            *std_cmake_args
     system "cmake", "--build", "build", "-j#{ENV.make_jobs}"
