@@ -22,6 +22,9 @@ class Ikafssn < Formula
   depends_on "openssl@3"
   depends_on "sqlite"
   depends_on "tbb"
+  # Compressed I/O codecs for FASTA queries and TSV/JSON/FASTA output.
+  # zlib and bzip2 ship with macOS so are not separately declared; xz
+  # provides liblzma; zstd is required project-wide as of v0.1.2026.05.05.
   depends_on "xz"
   depends_on "zstd"
 
