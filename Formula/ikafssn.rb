@@ -14,6 +14,7 @@ class Ikafssn < Formula
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
   depends_on "curl"
   depends_on "jsoncpp"
   depends_on "libdeflate"
@@ -22,6 +23,7 @@ class Ikafssn < Formula
   depends_on "sqlite"
   depends_on "tbb"
   depends_on "xz"
+  depends_on "zstd"
 
   resource "ncbi-cxx-toolkit" do
     url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.2.0.tar.gz"
