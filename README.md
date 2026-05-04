@@ -9,32 +9,32 @@ brew tap astanabe/ikafssn
 brew install ikafssn
 ```
 
-## Updating the formula (for maintainers)
+## How this tap works
 
-After creating a new release on GitHub (tag format: `vX.Y.YYYY.MM.DD`):
+`Formula/ikafssn.rb` pins three things per release:
 
-1. Wait for the GitHub Actions workflow to complete (builds .deb and Bottle).
+- the source tarball URL (`https://github.com/astanabe/ikafssn/archive/refs/tags/vX.Y.YYYY.MM.DD.tar.gz`) and its SHA256
+- the bottle `root_url` (`https://github.com/astanabe/ikafssn/releases/download/vX.Y.YYYY.MM.DD`)
+- the `arm64_tahoe` bottle SHA256
 
-2. Compute SHA256 hashes:
+The bottle (`ikafssn-X.Y.YYYY.MM.DD.arm64_tahoe.bottle.tar.gz`) is uploaded as
+a GitHub Release asset by ikafssn's
+[`release.yml`](https://github.com/astanabe/ikafssn/blob/main/.github/workflows/release.yml)
+workflow on `macos-26` (Apple Silicon).
 
-   ```
-   VERSION="0.1.YYYY.MM.DD"
-   TAG="v${VERSION}"
-   curl -sL "https://github.com/astanabe/ikafssn/archive/refs/tags/${TAG}.tar.gz" | sha256sum
-   curl -sL "https://github.com/astanabe/ikafssn/releases/download/${TAG}/ikafssn-${VERSION}.arm64_tahoe.bottle.tar.gz" | sha256sum
-   ```
+## Release flow
 
-   The Bottle SHA256 is also printed in the CI log as a `::notice::` annotation.
+When ikafssn is released, the formula is updated **automatically**. The
+`update-homebrew-tap` job in `release.yml`:
 
-3. Edit `Formula/ikafssn.rb`:
-   - Update the `url` tag (e.g., `v0.1.2026.02.28`)
-   - Update the source `sha256`
-   - Update `root_url` and `sha256` (`arm64_tahoe`) in the `bottle do` block
+1. waits for the bottle and source tarball to be present on the release tag,
+2. computes both SHA256 hashes by downloading them through `curl`,
+3. rewrites `Formula/ikafssn.rb` (URL, source `sha256`, bottle `root_url`,
+   and `arm64_tahoe` `sha256`) via a small Python script,
+4. commits and pushes the result to `main` of this repository using a
+   dedicated GitHub token (`HOMEBREW_IKAFSSN_TOKEN`).
 
-4. Commit and push:
-
-   ```
-   git add Formula/ikafssn.rb
-   git commit -m "Update ikafssn formula to ${VERSION}"
-   git push
-   ```
+There should be no need for a maintainer to edit `Formula/ikafssn.rb` by
+hand. If the formula falls out of sync (e.g., a release dispatch was
+re-triggered and the build was skipped because the asset was already
+present), re-dispatching the release workflow will refresh the formula.
