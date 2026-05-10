@@ -80,9 +80,9 @@ class Ikafssn < Formula
       system "make", "install"
     end
 
-    # Build NCBI C++ Toolkit (static, patched for madvise MADV_RANDOM on SeqDB mmaps)
+    # Build NCBI C++ Toolkit (static, patched to expose CSeqDB::SetMMapStrategy)
     resource("ncbi-cxx-toolkit").stage do
-      system "patch", "-p1", "-i", "#{buildpath}/patches/ncbi-cxx-toolkit-seqdb-madvise-random.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/patches/ncbi-cxx-toolkit-seqdb-mmap-strategy.patch"
       ENV.prepend "CFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       ENV.prepend "CXXFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       system "./cmake-configure",
