@@ -1,13 +1,13 @@
 class Ikafssn < Formula
   desc "K-mer-based alignment-free similarity search for nucleotide sequences"
   homepage "https://github.com/astanabe/ikafssn"
-  url "https://github.com/astanabe/ikafssn/archive/refs/tags/v0.1.2026.06.06.tar.gz"
-  sha256 "5229a5156b2bfa4832d49b237fefc67ee35b3b7bdb651cd84fd3650dc6942fab"
+  url "https://github.com/astanabe/ikafssn/archive/refs/tags/v0.1.2026.06.07.tar.gz"
+  sha256 "a4615439488506180285442a02c7a3747a5fddc0bc757f0846eff720709bfc5d"
   license "Apache-2.0"
 
   bottle do
-    root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.06.06"
-    sha256 cellar: :any, arm64_tahoe: "a866ff706d5f3c2ab70b4bab28c7473ea572b26f812cb1843bb3e0bb1c4f2abc"
+    root_url "https://github.com/astanabe/ikafssn/releases/download/v0.1.2026.06.07"
+    sha256 cellar: :any, arm64_tahoe: "cbda33e886225c00b6b6c52356f01635594703080805e6ef810699a9df7d83e4"
   end
 
   depends_on "cmake" => :build
