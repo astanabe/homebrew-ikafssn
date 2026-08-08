@@ -29,8 +29,8 @@ class Ikafssn < Formula
   depends_on "zstd"
 
   resource "ncbi-cxx-toolkit" do
-    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.2.0.tar.gz"
-    sha256 "17294b30dfbdef7bc4fc3785e2b6e43e7166c61a22df22874ff28e2876de50ec"
+    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.7.0.tar.gz"
+    sha256 "81bfb82c75f4fe0e0d3cb7414d837d34d6d01089b6a06989b429e4f5c0726906"
   end
 
   resource "parasail" do
@@ -39,20 +39,20 @@ class Ikafssn < Formula
   end
 
   resource "htslib" do
-    url "https://github.com/samtools/htslib/releases/download/1.23.1/htslib-1.23.1.tar.bz2"
-    sha256 "f8a3f36effeec38f043c53ab1f2d9ed45064f14205c5ef8e3c815763b90803c4"
+    url "https://github.com/samtools/htslib/releases/download/1.24/htslib-1.24.tar.bz2"
+    sha256 "28a8de191381c7a97a35675ceac76fa1ea95e7b678d6a2e9d600a7874e4077de"
   end
 
   resource "drogon" do
-    url "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.12.tar.gz"
-    sha256 "becc3c4f3b90f069f814baef164a7e3a2b31476dc6fe249b02ff07a13d032f48"
+    url "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.13.tar.gz"
+    sha256 "c3bd0e276b82576151dc7376c8d4027dd1fcec282d784849e11f84a7e977b2f5"
   end
 
   # The Drogon release tarball does not include the trantor submodule contents;
-  # this is the matching trantor release tag (commit 5000e2a).
+  # this is the matching trantor release tag.
   resource "trantor" do
-    url "https://github.com/an-tao/trantor/archive/refs/tags/v1.5.26.tar.gz"
-    sha256 "e47092938aaf53d51c8bc72d8f54ebdcf537e6e4ac9c8276f3539413d6dfeddf"
+    url "https://github.com/an-tao/trantor/archive/refs/tags/v1.5.28.tar.gz"
+    sha256 "8e3e493427a1704ee0d8cacb65e61b544d4b3a7159f5a4e55517272e1fb25c8f"
   end
 
   def install
@@ -80,9 +80,8 @@ class Ikafssn < Formula
       system "make", "install"
     end
 
-    # Build NCBI C++ Toolkit (static, patched to expose CSeqDB::SetMMapStrategy)
+    # Build NCBI C++ Toolkit (static)
     resource("ncbi-cxx-toolkit").stage do
-      system "patch", "-p1", "-i", "#{buildpath}/patches/ncbi-cxx-toolkit-seqdb-mmap-strategy.patch"
       ENV.prepend "CFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       ENV.prepend "CXXFLAGS", "-I#{HOMEBREW_PREFIX}/include"
       system "./cmake-configure",
