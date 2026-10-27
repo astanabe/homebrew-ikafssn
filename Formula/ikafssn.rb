@@ -29,8 +29,8 @@ class Ikafssn < Formula
   depends_on "zstd"
 
   resource "ncbi-cxx-toolkit" do
-    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.7.0.tar.gz"
-    sha256 "81bfb82c75f4fe0e0d3cb7414d837d34d6d01089b6a06989b429e4f5c0726906"
+    url "https://github.com/ncbi/ncbi-cxx-toolkit-public/archive/refs/tags/release/30.8.0.tar.gz"
+    sha256 "0df68f90abe6a48ad8927cf8dca5888a11a520bf8855f1621a4a5d27839a2769"
   end
 
   resource "parasail" do
@@ -44,15 +44,15 @@ class Ikafssn < Formula
   end
 
   resource "drogon" do
-    url "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.13.tar.gz"
-    sha256 "c3bd0e276b82576151dc7376c8d4027dd1fcec282d784849e11f84a7e977b2f5"
+    url "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.14.tar.gz"
+    sha256 "3831bfae74eb6b47965a424e5c9d593d5efa31e9f7e6a5e02d4754039facff5e"
   end
 
   # The Drogon release tarball does not include the trantor submodule contents;
   # this is the matching trantor release tag.
   resource "trantor" do
-    url "https://github.com/an-tao/trantor/archive/refs/tags/v1.5.28.tar.gz"
-    sha256 "8e3e493427a1704ee0d8cacb65e61b544d4b3a7159f5a4e55517272e1fb25c8f"
+    url "https://github.com/an-tao/trantor/archive/refs/tags/v1.5.29.tar.gz"
+    sha256 "0e6b9cc32720cbca61ac2e04d4d9b8e1afac3f4007b5978a91461d3eb21d653b"
   end
 
   def install
